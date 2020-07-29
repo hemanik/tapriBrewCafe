@@ -13,3 +13,13 @@ CREATE TABLE IF NOT EXISTS staff
     dob                         TIMESTAMP,
     CONSTRAINT user_pkey PRIMARY KEY (staff_id)
 );
+
+CREATE TABLE IF NOT EXISTS item
+(
+    id                          VARCHAR(64)         NOT NULL,
+    name                        VARCHAR(64)         NOT NULL,
+    description                 VARCHAR(64),
+    type                        VARCHAR(64)         NOT NULL,
+    cost                        INT,
+    CONSTRAINT item_pkey PRIMARY KEY (id)
+);

@@ -18,13 +18,13 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    @PostMapping("/add-user")
-    public ResponseEntity<Staff> createUser(@RequestBody StaffRequest staffRequest) {
-        return new ResponseEntity<>(staffService.createUser(staffRequest), HttpStatus.CREATED);
+    @PostMapping("/register-user")
+    public ResponseEntity<Staff> registerStaff(@RequestBody StaffRequest staffRequest) {
+        return new ResponseEntity<>(staffService.registerStaff(staffRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("/get-user/{username}")
-    public ResponseEntity<Staff> getUserByName(@PathVariable("username") String username) {
-        return new ResponseEntity<>(staffService.getUserByName(username), HttpStatus.OK);
+    public ResponseEntity<Staff> getStaffByUsername(@PathVariable("username") String username) {
+        return new ResponseEntity<>(staffService.getStaffByUsername(username), HttpStatus.OK);
     }
 }

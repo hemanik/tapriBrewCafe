@@ -1,7 +1,11 @@
-package com.tapriBrewCafe.dashboard.staffMgmt.controller;
+package com.tapriBrewCafe.dashboard.orderMgmt.controller;
 
 import com.tapriBrewCafe.dashboard.config.EmbeddedPostgresConfig;
-import com.tapriBrewCafe.dashboard.staffMgmt.config.StaffTestConfig;
+import com.tapriBrewCafe.dashboard.orderMgmt.config.OrderMgmtTestConfig;
+import com.tapriBrewCafe.dashboard.orderMgmt.dtos.ItemRequest;
+import com.tapriBrewCafe.dashboard.orderMgmt.dtos.ItemType;
+import com.tapriBrewCafe.dashboard.orderMgmt.util.OrderMgmtTestUtils;
+import com.tapriBrewCafe.dashboard.staffMgmt.controller.StaffController;
 import com.tapriBrewCafe.dashboard.staffMgmt.dtos.StaffRequest;
 import com.tapriBrewCafe.dashboard.staffMgmt.util.StaffMgmtTestUtils;
 import com.tapriBrewCafe.dashboard.staffMgmt.util.Utils;
@@ -24,33 +28,34 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {EmbeddedPostgresConfig.class, StaffTestConfig.class})
-@EntityScan(basePackages = { "com.tapriBrewCafe.dashboard.staffMgmt.entity.model"})
-@EnableJpaRepositories(basePackages = {"com.tapriBrewCafe.dashboard.staffMgmt.entity.repository"})
+@SpringBootTest(classes = {EmbeddedPostgresConfig.class, OrderMgmtTestConfig.class})
+@EntityScan(basePackages = { "com.tapriBrewCafe.dashboard.orderMgmt.entity.model"})
+@EnableJpaRepositories(basePackages = {"com.tapriBrewCafe.dashboard.orderMgmt.entity.repository"})
 @AutoConfigureMockMvc
 @EnableAutoConfiguration
-public class StaffControllerTest {
+public class ItemControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private StaffController staffController;
+    private ItemController itemController;
 
     @Test
-    public void testRegisterUser() throws Exception {
-        StaffRequest staffRequest = StaffMgmtTestUtils.getStaffRequest();
+    public void testAddItem() throws Exception {
+        ItemRequest itemRequest = OrderMgmtTestUtils
+                .getItemRequest("dark roast", "Dark Roast Coffee",100D, ItemType.BEVERAGE);
 
-        mockMvc.perform(post("/register-user")
-                .content(Utils.toJson(staffRequest))
+        mockMvc.perform(post("/add-item")
+                .content(Utils.toJson(itemRequest))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().is(CREATED.value()))
                 .andReturn();
     }
 
     @Test
-    public void testGetUser() throws Exception {
-        mockMvc.perform(get("/get-user/test-user"))
+    public void testGetAllItemsOfType() throws Exception {
+        mockMvc.perform(get("/get-all/" + ItemType.BEVERAGE))
                 .andExpect(status().is(OK.value()))
                 .andReturn();
     }

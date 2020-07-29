@@ -1,10 +1,16 @@
 package com.tapriBrewCafe.dashboard.staffMgmt.service;
 
+import java.util.ArrayList;
+
+import com.google.common.collect.Lists;
 import com.tapriBrewCafe.dashboard.config.EmbeddedPostgresConfig;
 import com.tapriBrewCafe.dashboard.staffMgmt.config.StaffTestConfig;
 import com.tapriBrewCafe.dashboard.staffMgmt.dtos.StaffRequest;
 import com.tapriBrewCafe.dashboard.staffMgmt.entity.model.Staff;
 import com.tapriBrewCafe.dashboard.staffMgmt.entity.repository.StaffRepository;
+import com.tapriBrewCafe.dashboard.staffMgmt.util.StaffMgmtTestUtils;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,13 +35,22 @@ public class StaffServiceTest {
     private StaffRepository staffRepository;
 
     @Test
-    public void testCreateUser() {
-        StaffRequest staffRequest = new StaffRequest();
-        staffRequest.setName("hemani");
-        staffRequest.setPassword("xyz");
-        staffRequest.setUsername("helllo");
-        Staff staff = staffService.createUser(staffRequest);
+    public void testRegisterUser() {
+        StaffRequest staffRequest = StaffMgmtTestUtils.getStaffRequest();
 
-        Assert.assertNotNull(staff);
+        staffService.registerStaff(staffRequest);
+
+        ArrayList<Staff> storedStaff = Lists.newArrayList(staffRepository.findAll());
+        Assert.assertEquals(1, storedStaff.size());
+        Assert.assertEquals("test-user", storedStaff.get(0).getUsername());
+    }
+
+    @Test
+    public void testGetUser() {
+        Staff staff = staffService.getStaffByUsername("test-user");
+
+        Assert.assertEquals("some-name", staff.getName());
+        Assert.assertEquals("password", staff.getPassword());
+        Assert.assertEquals("test-user", staff.getUsername());
     }
 }

@@ -17,12 +17,12 @@ public class StaffService {
     @Autowired
     private StaffRepository staffRepository;
 
-    public Staff createUser(StaffRequest staffRequest) {
+    public Staff registerStaff(StaffRequest staffRequest) {
         validateRequest(staffRequest);
         return staffRepository.save(REQUEST_STAFF_FUNCTION.apply(staffRequest));
     }
 
-    public Staff getUserByName(String username) {
+    public Staff getStaffByUsername(String username) {
         return staffRepository.findByUsername(username);
     }
 
